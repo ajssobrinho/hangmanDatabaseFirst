@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="hangmanDatabaseFirstDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'hangmanDatabaseFirstDB.dbo.Dificuldade' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Dificuldade">
+          <Key>
+            <PropertyRef Name="id_dificuldade" />
+            <PropertyRef Name="descricao" />
+            <PropertyRef Name="nr_letras" />
+          </Key>
+          <Property Name="id_dificuldade" Type="int" Nullable="false" />
+          <Property Name="descricao" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="nr_letras" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Palavra">
+          <Key>
+            <PropertyRef Name="id_palavra" />
+          </Key>
+          <Property Name="id_palavra" Type="int" Nullable="false" />
+          <Property Name="palavra" Type="varchar" MaxLength="50" />
+          <Property Name="id_dificuldade" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'hangmanDatabaseFirstDB.dbo.Palavra_categoria' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Palavra_categoria">
+          <Key>
+            <PropertyRef Name="id_palavra" />
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_palavra" Type="int" Nullable="false" />
+          <Property Name="id_categoria" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Palavra_categoria_Categoria">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1" />
+          <End Role="Palavra_categoria" Type="Self.Palavra_categoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="id_categoria" />
+            </Principal>
+            <Dependent Role="Palavra_categoria">
+              <PropertyRef Name="id_categoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Palavra_categoria_Palavra">
+          <End Role="Palavra" Type="Self.Palavra" Multiplicity="1" />
+          <End Role="Palavra_categoria" Type="Self.Palavra_categoria" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Palavra">
+              <PropertyRef Name="id_palavra" />
+            </Principal>
+            <Dependent Role="Palavra_categoria">
+              <PropertyRef Name="id_palavra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="hangmanDatabaseFirstDBModelStoreContainer">
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Palavra" EntityType="Self.Palavra" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dificuldade" EntityType="Self.Dificuldade" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Dificuldade].[id_dificuldade] AS [id_dificuldade], 
+    [Dificuldade].[descricao] AS [descricao], 
+    [Dificuldade].[nr_letras] AS [nr_letras]
+    FROM [dbo].[Dificuldade] AS [Dificuldade]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Palavra_categoria" EntityType="Self.Palavra_categoria" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Palavra_categoria].[id_palavra] AS [id_palavra], 
+    [Palavra_categoria].[id_categoria] AS [id_categoria]
+    FROM [dbo].[Palavra_categoria] AS [Palavra_categoria]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Palavra_categoria_Categoria" Association="Self.FK_Palavra_categoria_Categoria">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Palavra_categoria" EntitySet="Palavra_categoria" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Palavra_categoria_Palavra" Association="Self.FK_Palavra_categoria_Palavra">
+            <End Role="Palavra" EntitySet="Palavra" />
+            <End Role="Palavra_categoria" EntitySet="Palavra_categoria" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="hangmanDatabaseFirstDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="id_categoria" />
+          </Key>
+          <Property Name="id_categoria" Type="Int32" Nullable="false" />
+          <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Palavras" Relationship="Self.Palavra_categoria" FromRole="Categoria" ToRole="Palavra" />
+        </EntityType>
+        <EntityType Name="Palavra">
+          <Key>
+            <PropertyRef Name="id_palavra" />
+          </Key>
+          <Property Name="id_palavra" Type="Int32" Nullable="false" />
+          <Property Name="palavra1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_dificuldade" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Categorias" Relationship="Self.Palavra_categoria" FromRole="Palavra" ToRole="Categoria" />
+        </EntityType>
+        <EntityType Name="Dificuldade">
+          <Key>
+            <PropertyRef Name="id_dificuldade" />
+            <PropertyRef Name="descricao" />
+            <PropertyRef Name="nr_letras" />
+          </Key>
+          <Property Name="id_dificuldade" Type="Int32" Nullable="false" />
+          <Property Name="descricao" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="nr_letras" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="Palavra_categoria">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="*" />
+          <End Role="Palavra" Type="Self.Palavra" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="hangmanDatabaseFirstDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categorias" EntityType="Self.Categoria" />
+          <EntitySet Name="Palavras" EntityType="Self.Palavra" />
+          <EntitySet Name="Dificuldades" EntityType="Self.Dificuldade" />
+          <AssociationSet Name="Palavra_categoria" Association="Self.Palavra_categoria">
+            <End Role="Categoria" EntitySet="Categorias" />
+            <End Role="Palavra" EntitySet="Palavras" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="hangmanDatabaseFirstDBModelStoreContainer" CdmEntityContainer="hangmanDatabaseFirstDBEntities">
+          <EntitySetMapping Name="Categorias">
+            <EntityTypeMapping TypeName="hangmanDatabaseFirstDBModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Palavras">
+            <EntityTypeMapping TypeName="hangmanDatabaseFirstDBModel.Palavra">
+              <MappingFragment StoreEntitySet="Palavra">
+                <ScalarProperty Name="id_palavra" ColumnName="id_palavra" />
+                <ScalarProperty Name="palavra1" ColumnName="palavra" />
+                <ScalarProperty Name="id_dificuldade" ColumnName="id_dificuldade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dificuldades">
+            <EntityTypeMapping TypeName="hangmanDatabaseFirstDBModel.Dificuldade">
+              <MappingFragment StoreEntitySet="Dificuldade">
+                <ScalarProperty Name="id_dificuldade" ColumnName="id_dificuldade" />
+                <ScalarProperty Name="descricao" ColumnName="descricao" />
+                <ScalarProperty Name="nr_letras" ColumnName="nr_letras" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Palavra_categoria" TypeName="hangmanDatabaseFirstDBModel.Palavra_categoria" StoreEntitySet="Palavra_categoria">
+            <EndProperty Name="Categoria">
+              <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+            </EndProperty>
+            <EndProperty Name="Palavra">
+              <ScalarProperty Name="id_palavra" ColumnName="id_palavra" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
