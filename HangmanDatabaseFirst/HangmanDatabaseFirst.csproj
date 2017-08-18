@@ -153,6 +153,7 @@
       <DependentUpon>HangmanModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PalavrasController.cs" />
     <Compile Include="Dificuldade.cs">
       <DependentUpon>HangmanModel.tt</DependentUpon>
     </Compile>
@@ -233,6 +234,11 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Palavras\Create.cshtml" />
+    <Content Include="Views\Palavras\Delete.cshtml" />
+    <Content Include="Views\Palavras\Details.cshtml" />
+    <Content Include="Views\Palavras\Edit.cshtml" />
+    <Content Include="Views\Palavras\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
